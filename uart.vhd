@@ -48,7 +48,7 @@ begin
         CNT_CLCK_EN   => cnt_en,
         CNT_BIT_EN    => cnt_2_en,
         VALID         => DVLD,
-        SB_EN         => stopb_en, --sb == stop bit 
+        STOPB_EN      => stopb_en, --sb == stop bit 
         STOPB_EN_IN   => stopb_en_in
     );
 
@@ -90,11 +90,13 @@ begin
            
            --READ_DATA_STATE
            if rx_en = '1' then
-              if cnt_bit = "0000"  then
+              --if cnt_bit = "0000"  then
+              if cnt_clck(4) = '1' then
                 cnt_clck <= "00000";
                 DOUT(to_integer(unsigned(cnt_bit))) <= DIN;
                 cnt_bit <= cnt_bit + 1;
-              else if cnt_clck = "01111" then
+              --else if cnt_clck = "01111" then
+              else if cnt_clck = "10000" then
                 cnt_clck <= "00000";
                 DOUT(to_integer(unsigned(cnt_bit))) <= DIN;
                 cnt_bit <= cnt_bit + 1;

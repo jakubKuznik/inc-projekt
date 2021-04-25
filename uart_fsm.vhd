@@ -2,7 +2,6 @@
 -- Author(s):Jakub Kuzník xkuzni04 
 -- Tento soubor je FSM kde ukladam a menim stavy 
 
-
 --soubor konecného automatu
 
 library ieee;
@@ -19,7 +18,7 @@ port( --zde definujeme jaké má entinta porty
    STOPB_EN_IN :  in std_logic; --slouzi pro zmenu stavu z 4 -> 5
    
    RX_EN         : out std_logic;  -- read_data state
-   SB_EN         : out std_logic;  -- stop bit state 
+   STOPB_EN      : out std_logic;  -- stop bit state 
    CNT_CLCK_EN   : out std_logic;  -- enable cnt_clck
    CNT_BIT_EN    : out std_logic;  -- enable cnt_bti
    VALID         : out std_logic   -- data valid state 
@@ -39,7 +38,7 @@ begin
   
   --READ_DATA
   RX_EN   <='1'   when state = READ_DATA else '0';
-  SB_EN   <='1'   when state = WAIT_STOP_BIT else '0';
+  STOPB_EN   <='1'   when state = WAIT_STOP_BIT else '0';
   
   CNT_CLCK_EN  <='1'   when state = COUNT_UNTIL_F_B or state = READ_DATA or state = WAIT_STOP_BIT else '0';
   CNT_BIT_EN <='1'  when state = READ_DATA else '0';
@@ -59,7 +58,7 @@ begin
                                         end if;
                                         
               -- 2. STATE COUNT CLCK UNTIL MEASURING FIRST INPUT BIT                           
-              when COUNT_UNTIL_F_B  => if CNT_CLCK = "10111" then -- cekam do 24 abych se dostal do prostred signalu
+              when COUNT_UNTIL_F_B  => if CNT_CLCK = "10110" then -- cekam do 24 abych se dostal do prostred signalu
                                              state <= READ_DATA;
                                         end if;
               -- 3. STATE READ 8 INPUT BITS                          
